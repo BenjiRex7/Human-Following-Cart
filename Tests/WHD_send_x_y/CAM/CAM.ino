@@ -3,8 +3,11 @@
 #include <esp32cam.h>
 
 //THIS PROGRAM SENDS IMAGE IF IT IS PLACED IN WEB IP, BUT IF IT IS PLACED IN PYTHON IT SENDS VIDEO THROUGH THE ITERATIONS. . . (IF IT WORKS IN PYTHON)
-const char* WIFI_SSID = "Trojan Virus";
-const char* WIFI_PASS = "244466666";
+const char* WIFI_SSID = "HUAWEI-8NBn";
+const char* WIFI_PASS = "PakistaN123";
+
+// const char* WIFI_SSID = "Trojan Virus";
+// const char* WIFI_PASS = "244466666";
 
 WebServer server(80); //server on port 80
 
@@ -52,6 +55,8 @@ void setup()
 {
   Serial.begin(115200);
   Serial.println();
+  pinMode(4, OUTPUT); // Set LED pin as output3
+  digitalWrite(4,HIGH);
 
   {
     using namespace esp32cam;
