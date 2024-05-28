@@ -3,20 +3,23 @@
 #include <esp32cam.h>
 
 //THIS PROGRAM SENDS IMAGE IF IT IS PLACED IN WEB IP, BUT IF IT IS PLACED IN PYTHON IT SENDS VIDEO THROUGH THE ITERATIONS. . . (IF IT WORKS IN PYTHON)
-const char* WIFI_SSID = "HUAWEI-8NBn";
-const char* WIFI_PASS = "PakistaN123";
+// const char* WIFI_SSID = "FireNation";
+// const char* WIFI_PASS = "KingZuko3";
+
+const char* WIFI_SSID = "WaterTribe";
+const char* WIFI_PASS = "Katara123";
+
 
 // const char* WIFI_SSID = "Trojan Virus";
 // const char* WIFI_PASS = "244466666";
 
-WebServer server(80); //server on port 80
+WebServer server(80);  //server on port 80
 
-static auto loRes = esp32cam::Resolution::find(320, 240); //low resolution
-static auto hiRes = esp32cam::Resolution::find(800, 600); //high resolution
+static auto loRes = esp32cam::Resolution::find(320, 240);  //low resolution
+static auto hiRes = esp32cam::Resolution::find(800, 600);  //high resolution
 //static auto hiRes = esp32cam::Resolution::find(640, 480); //high resolution (for fps rates) (IP CAM APP)
 
-void
-serveJpg() //capture image .jpg
+void serveJpg()  //capture image .jpg
 {
   auto frame = esp32cam::capture();
   if (frame == nullptr) {
@@ -33,8 +36,7 @@ serveJpg() //capture image .jpg
   frame->writeTo(client);  //and send to a client (in this case it will be python)
 }
 
-void
-handleJpgLo()  //allows to send low resolution image
+void handleJpgLo()  //allows to send low resolution image
 {
   if (!esp32cam::Camera.changeResolution(loRes)) {
     Serial.println("SET-LO-RES FAIL");
@@ -42,8 +44,7 @@ handleJpgLo()  //allows to send low resolution image
   serveJpg();
 }
 
-void
-handleJpgHi() //allows to send high resolution image
+void handleJpgHi()  //allows to send high resolution image
 {
   if (!esp32cam::Camera.changeResolution(hiRes)) {
     Serial.println("SET-HI-RES FAIL");
@@ -51,12 +52,11 @@ handleJpgHi() //allows to send high resolution image
   serveJpg();
 }
 
-void setup()
-{
+void setup() {
   Serial.begin(115200);
   Serial.println();
-  pinMode(4, OUTPUT); // Set LED pin as output3
-  digitalWrite(4,HIGH);
+  pinMode(4, OUTPUT);  // Set LED pin as output3
+  digitalWrite(4, HIGH);
 
   {
     using namespace esp32cam;
@@ -72,25 +72,34 @@ void setup()
 
   WiFi.persistent(false);
   WiFi.mode(WIFI_STA);
-  WiFi.begin(WIFI_SSID, WIFI_PASS); //connect to the WiFi network
+  WiFi.begin(WIFI_SSID, WIFI_PASS);  //connect to the WiFi network
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    Serial.print(".");
+    digitalWrite(4, LOW);
   }
+  delay(100);
+  digitalWrite(4, HIGH);
+  delay(100);
+  digitalWrite(4, LOW);
+  delay(100);
+  digitalWrite(4, HIGH);
+  delay(100);
+  digitalWrite(4, LOW);
+  Serial.println("");
+  Serial.print("http://");
+  Serial.print(WiFi.localIP());
+  Serial.println("/cam-lo.jpg");  //to connect IP low res
 
   Serial.print("http://");
   Serial.print(WiFi.localIP());
-  Serial.println("/cam-lo.jpg");//to connect IP low res
-
-  Serial.print("http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("/cam-hi.jpg");//to connect high res IP
-  server.on("/cam-lo.jpg",handleJpgLo);//send to the server
+  Serial.println("/cam-hi.jpg");          //to connect high res IP
+  server.on("/cam-lo.jpg", handleJpgLo);  //send to the server
   server.on("/cam-hi.jpg", handleJpgHi);
 
   server.begin();
 }
 
-void loop()
-{
+void loop() {
   server.handleClient();
 }
