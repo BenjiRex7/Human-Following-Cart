@@ -5,11 +5,13 @@ import requests
 
 # esp32_ip = '192.168.110.0'
 # esp32_ip_2 = '192.168.110.10'
-
 # esp32_ip_2 = '192.168.100.22'
-esp32_ip_2 = '192.168.232.55'
+# esp32_ip_2 = '192.168.232.55'
+# esp32_ip_2 = '192.168.43.55'
+esp32_ip_2 = '192.168.43.10'
 
-url = 'http://192.168.232.27/cam-hi.jpg'
+
+url = 'http://192.168.43.27/cam-hi.jpg'
 winName = 'ESP32 CAMERA'
 cv2.namedWindow(winName, cv2.WINDOW_AUTOSIZE)
 

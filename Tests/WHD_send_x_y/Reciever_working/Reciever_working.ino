@@ -9,20 +9,33 @@ const char* WIFI_PASS = "Katara123";
 
 WebServer server(80);
 
-#define R1 18
-#define R2 19
+#define R1 33
+#define R2 32
+#define W_LED 2
+
 
 void setup() {
   Serial.begin(115200);
-
+  pinMode(W_LED, OUTPUT);
+  digitalWrite(W_LED, HIGH);
   // Initialize WiFi connection
   WiFi.begin(WIFI_SSID, WIFI_PASS);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
+    digitalWrite(W_LED, LOW);
   }
+  delay(100);
+  digitalWrite(W_LED, HIGH);
+  delay(100);
+  digitalWrite(W_LED, LOW);
+  delay(100);
+  digitalWrite(W_LED, HIGH);
+  delay(100);
+  digitalWrite(W_LED, LOW);
   Serial.println("");
   Serial.println("WiFi connected");
+
 
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
@@ -71,9 +84,9 @@ void handleCoordinates() {
       Serial.print(", targetPosition=");
       Serial.println(targetPosition);
       // Move motors based on the target position
-      if (targetPosition > 75) {
+      if (targetPosition > 50) {
         turnRight();
-      } else if (targetPosition < -75) {
+      } else if (targetPosition < -50) {
         turnLeft();
       } else {
         stopMotors();
